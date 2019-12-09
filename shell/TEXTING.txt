@@ -1,0 +1,161 @@
+note:
+to run my shell, start with:
+valgrind --leak-check=yes ./ffosh
+
+I. elementary level
+
+0.
+     input:/bin/ls -1
+     output:the current directory
+     reason:the system call execve() execute file /bin/ls, and take -1 as argument
+
+
+1.
+     input:echo 23
+     output:echo 23
+     reason:the shell will read from PATH and search the directory, find /bin/echo and take 23 as argument
+
+
+2.
+     input:touch 123.txt
+     output:123.txt show up in directory
+     reason:the shell search and execute /bin/touch, and creat 123.txt
+
+
+3.
+     input:rm 123.txt
+     output:the 123.txt was deleted
+     reason:the shell search and ask execve() to execute rm , 123.txt as argument, so it is deleted
+
+
+4.
+     input:sfdsf
+     output:Command sfdsf not found 
+     reason:the shell search and cannot find the command 
+
+
+5.
+     input:pwd
+     output:current working directory
+     reason:the shell search and execute pwd
+
+
+6.
+     input:cat ffosh.cpp
+     output:open the file ffosh.cpp
+     reason:search and execute cat, ffosh.cpp as argument
+
+
+7.
+     input:less parse.cpp
+     output:open the file parse.cpp
+     reason:search and execute less, parse.cpp as argument
+
+
+8.
+     input:df -h
+     output:show the size of your file system
+     reason:search and execute df, -h as argument
+
+
+9.
+     input:exit / ctrl+d
+     output:the program will exit
+     reason:it is required as Drew says
+
+
+getting board? lets try something cool
+II.junior level
+10.
+     input:diff ffosh.cpp parse.cpp
+     output:show difference between two files
+     reason:the shell search and execute diff, take ffosh.cpp & parse.cpp as argument
+
+
+11.
+     input:cd ..
+     output:the prompt change to upper level
+     reason:shell execute chdir(), and .. means relative upper lever
+
+
+12.
+     input:env
+     output:shows the enrionment
+     reason:shell find & execute env
+
+
+13.
+     input:"set Drew devil" then "echo $Drew"
+     output:devil
+     reason:first set Drew as shell variable and then use $to parse then echo
+
+
+14.
+     input:"export Drew" then "env“
+     output:now he shows up in envrionment variable, making all other program suffer
+     reason:the shell exports the value out
+
+
+15.
+     input:"rev Drew" then "export Drew" then "env"
+     output:Drew = lived
+     reason:reverse the variable and export to PATH, now other program feels better
+
+
+16.
+     input:echo $Drew
+     output:lived
+     reason:shell first parse Drew, then pass to echo
+
+
+17.
+     input:"echo $Drew > god.txt" then "less god.txt"
+     output:lived shows up
+     reason:of cousre he is a god so he lived! shell parse Drew then pass to echo then redirect output to god.txt
+
+
+18.
+     input:echo "Drew is really bad"   " no , your are too weak"
+     output:Drew is really bad  no , your are too weak
+     reason:the ""indicate a sentence, they are pass to echo as whole
+
+
+19.
+     input:echo "\""
+     output:"
+     reason:\" indicate ", and outter ""is closed
+
+
+WANT MORE? more corner case
+III.
+20.
+     input:echo "\"
+     output:unclosed quotation mark
+     reason:\"indicate  ", and therefore 1 " is unclosed
+
+
+21.
+     input:set 12 34; set 56 78; echo $12+$56 
+     output:34-78
+     reason:shell parse 12 & 56 then pass to echo
+
+
+22.
+     input:set 56 $12; echo $56
+     output:34
+     reason:shell first parse $12 then pass to echos
+
+
+23.
+     input:set aB_1 2, echo $aB_1
+     output:2
+     reason:parse aB_1 then pass to echo
+
+
+24.
+     input:set 83+2 1
+     output:illegal variable
+     reason:+ is not allow as key
+
+
+i have demonstrated my shell can run much combination, have fun creating your test case!
